@@ -1,4 +1,4 @@
-package com.gngm
+package com.lululala.gngm
 
 import android.app.Application
 import com.facebook.react.PackageList

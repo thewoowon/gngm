@@ -1,52 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>GNGM</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>en</string>
+		<key>CFBundleDisplayName</key>
+		<string>가는김에</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>$(PRODUCT_NAME)</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>$(MARKETING_VERSION)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string></string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.972192710903-234ucngm45hrmqs551hs6bu8dued8t8k</string>
+				</array>
+			</dict>
+		</array>
+		<key>CFBundleVersion</key>
+		<string>$(CURRENT_PROJECT_VERSION)</string>
+		<key>GIDClientID</key>
+		<string>972192710903-234ucngm45hrmqs551hs6bu8dued8t8k.apps.googleusercontent.com</string>
+		<key>LSRequiresIPhoneOS</key>
+		<true />
+		<key>NMFClientId</key>
+		<string>sjn4t68v36</string>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<false />
+			<key>NSAllowsArbitraryLoadsInWebContent</key>
+			<true />
+			<key>NSAllowsLocalNetworking</key>
+			<true />
+		</dict>
+		<key>NSCameraUsageDescription</key>
+		<string>사진 촬영 및 비디오 녹화를 위해 카메라 접근이 필요합니다.</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Face ID를 사용하여 보안을 유지합니다.</string>
+		<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+		<dict>
+			<key>Purpose</key>
+			<string>앱의 위치 정확도를 제공하기 위해 필요합니다.</string>
+		</dict>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>위치 기반 서비스를 제공하기 위해 필요합니다.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>앱이 백그라운드에서도 위치 정보를 가져올 수 있습니다.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>사진 라이브러리에 콘텐츠를 저장하기 위해 필요합니다.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>사진 라이브러리에서 미디어를 선택하기 위해 필요합니다.</string>
+		<key>UIAppFonts</key>
+		<array>
+			<string>Pretendard-Black.otf</string>
+			<string>Pretendard-Bold.otf</string>
+			<string>Pretendard-ExtraBold.otf</string>
+			<string>Pretendard-ExtraLight.otf</string>
+			<string>Pretendard-Light.otf</string>
+			<string>Pretendard-Medium.otf</string>
+			<string>Pretendard-Regular.otf</string>
+			<string>Pretendard-SemiBold.otf</string>
+			<string>Pretendard-Thin.otf</string>
+			<string>Jalnan2.otf</string>
+			<string>NanumSquareNeoOTF-Bd.otf</string>
+			<string>NanumSquareNeoOTF-Eb.otf</string>
+			<string>NanumSquareNeoOTF-Hv.otf</string>
+			<string>NanumSquareNeoOTF-Lt.otf</string>
+			<string>NanumSquareNeoOTF-Rg.otf</string>
+		</array>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIRequiredDeviceCapabilities</key>
+		<array>
+			<string>arm64</string>
+		</array>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false />
+		<key>UNAuthorizationOptionAlert</key>
+		<string>알림을 통해 중요한 정보를 제공합니다.</string>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>arm64</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-</dict>
 </plist>
