@@ -1,79 +1,46 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🎭 **Lululala - 길 위에서 만나는 가치 있는 연결**  
 
-# Getting Started
+[🔗 공식 소개 페이지](https://lululala.at)  
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## 🚀 **서비스 소개**  
+**Lululala**는 공예 관련 소상공인과 종사자들을 연결하는 새로운 네트워크 플랫폼입니다.  
+이제, 길 위에서 자연스럽게 만나는 순간을 놓치지 마세요.  
+Lululala는 단순한 배송이 아니라, *가치를 전달하는 연결*을 만듭니다.
 
-## Step 1: Start the Metro Server
+---
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## 🎨 **주요 기능**  
 
-To start Metro, run the following command from the _root_ of your React Native project:
+### 📦 공예 제품 전달 서비스  
+- 공예품을 원하는 위치에서 쉽게 전달하고, 받아보세요.  
+- 사용자의 이동 동선을 활용하여 **합리적인 비용**으로 제품을 주고받을 수 있습니다.  
 
-```bash
-# using npm
-npm start
+### 🛠 **공예 종사자 커뮤니티**  
+- 전국의 공예 종사자들과 교류하고 협업하세요.  
+- 실시간 피드, 프로젝트 공유, 작품 리뷰 등 공예업계를 위한 맞춤형 커뮤니티 기능을 제공합니다.  
 
-# OR using Yarn
-yarn start
-```
+### 🏫 **공예 클래스 & 워크숍**  
+- 오프라인 및 온라인 공예 클래스 정보를 확인하고 신청하세요.  
+- 경험 많은 공예 전문가들에게 직접 배울 수 있는 기회를 제공합니다.  
 
-## Step 2: Start your Application
+---
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## 🎯 **대상 사용자**  
+🔹 공예 제품을 직접 제작하거나 판매하는 **소상공인**  
+🔹 창작과 실습을 병행하는 **공예 전공 학생**  
+🔹 서로를 연결하고 배우며 성장하고 싶은 **공예 종사자들**  
 
-### For Android
+---
 
-```bash
-# using npm
-npm run android
+## 🌏 **핵심 가치 - ‘길 위에서 만나는 연결’**  
+**Lululala는 단순한 운송 서비스가 아닙니다.**  
+우리의 목표는 **공예업에 종사하는 사람들이 자연스럽게 연결되고, 새로운 기회를 발견하는 것**입니다.  
+공예의 가치가 더 많은 사람들에게 전달될 수 있도록, **Lululala가 그 길을 함께 만들어갑니다.**  
 
-# OR using Yarn
-yarn android
-```
+---
 
-### For iOS
+## 📥 **지금 시작하세요!**  
+🚀 [앱 다운로드 & 서비스 둘러보기](https://lululala.at)  
+🔗 **웹사이트:** [lululala.at](https://lululala.at)  
+📌 **Instagram & SNS:** _Coming Soon_  
 
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
