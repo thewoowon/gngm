@@ -21,7 +21,25 @@ const useMe = () => {
     }
   };
 
-  return {getMe};
+  const deleteMe = async (): Promise<boolean> => {
+    try {
+      const accessToken = await getAccessToken();
+      const response = await customAxios.delete(`/users/delete`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status !== 200) {
+        throw new Error('내 정보 삭제 실패');
+      }
+      return true;
+    } catch (error) {
+      console.error('내 정보 삭제 오류:', error);
+      return false;
+    }
+  };
+
+  return {getMe, deleteMe};
 };
 
 export default useMe;
