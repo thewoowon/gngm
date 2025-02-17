@@ -1,5 +1,5 @@
 {
-  "name": "GNGM",
+  "name": "gngm",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,9 +7,12 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "test": "jest",
-    "start": "NODE_ENV=development react-native start",
-    "start:clean": "NODE_ENV=development react-native start --reset-cache",
-    "build:prod": "NODE_ENV=production react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle"
+    "start": "ENVFILE=.env.development NODE_ENV=development react-native start",
+    "start:clean": "ENVFILE=.env.development NODE_ENV=development react-native start --reset-cache",
+    "build:prod:ios": "ENVFILE=.env.production NODE_ENV=production react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle",
+    "build:prod:android": "cd android && ENVFILE=.env.production ./gradlew assembleRelease",
+    "deploy:ios": "ENVFILE=.env.production xcodebuild -workspace ios/GNGM.xcworkspace -scheme GNGM -configuration Release -sdk iphoneos archive",
+    "deploy:android": "cd android && ENVFILE=.env.production ./gradlew assembleRelease"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5",
