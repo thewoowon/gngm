@@ -9,7 +9,6 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   MarkerIcon,
   CalendarIcon,
@@ -618,7 +617,7 @@ const DeliveryCreateScreen = ({navigation, route}: any) => {
   }, [place]);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -863,7 +862,7 @@ const DeliveryCreateScreen = ({navigation, route}: any) => {
           }}
         />
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

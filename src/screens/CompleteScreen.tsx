@@ -7,13 +7,11 @@ import {
   View,
   Pressable,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {BigHeartIcon} from '../components/Icons';
-import {useNavigation} from '@react-navigation/native';
 
 const CompleteScreen = ({navigation, route}: any) => {
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -84,7 +82,7 @@ const CompleteScreen = ({navigation, route}: any) => {
           </Pressable>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

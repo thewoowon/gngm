@@ -10,11 +10,9 @@ import {
   Switch,
   Alert,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LeftArrowIcon} from '../components/Icons';
 import {useMe} from '../hooks';
 import {User} from '../types/get';
-
 import {ProfileImageUploader} from '../components/ImageUploader/ProfileImageUploader';
 import customAxios from '../axios/customAxios';
 import {getAccessToken} from '../services/auth';
@@ -80,7 +78,7 @@ const ProfileEditScreen = ({navigation, route}: any) => {
     }, []),
   );
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -182,7 +180,7 @@ const ProfileEditScreen = ({navigation, route}: any) => {
           </View>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

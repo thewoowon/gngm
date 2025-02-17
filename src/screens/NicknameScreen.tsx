@@ -9,7 +9,6 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LeftArrowIcon, RefreshIcon, RemoveIcon} from '../components/Icons';
 import {useAuth} from '../hooks';
 import axios from 'axios';
@@ -93,7 +92,7 @@ const NicknameScreen = ({navigation, route}: any) => {
   }, [debouncedString]);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -197,7 +196,7 @@ const NicknameScreen = ({navigation, route}: any) => {
           </Pressable>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

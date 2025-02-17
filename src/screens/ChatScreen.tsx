@@ -9,7 +9,6 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   HomeIcon,
   LeftArrowIcon,
@@ -278,7 +277,7 @@ const ChatScreen = ({navigation, route}: any) => {
   }, []);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -394,7 +393,7 @@ const ChatScreen = ({navigation, route}: any) => {
           </View>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

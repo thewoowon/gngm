@@ -11,7 +11,6 @@ import {
   Animated,
   ScrollView,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {KakaoIcon, RingIcon, SearchIcon} from '../components/Icons';
 import {CURRENT_ORDER_DATA, PREVIOUS_ORDER_DATA} from '../data';
 
@@ -29,7 +28,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
     // navigation.navigate('Chat');
   };
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -368,7 +367,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

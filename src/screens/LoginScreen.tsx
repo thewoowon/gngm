@@ -9,7 +9,6 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {GoogleIcon, KakaoIcon, NaverIcon} from '../components/Icons';
 import {
@@ -130,7 +129,7 @@ const LoginScreen = ({navigation, route}: any) => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
@@ -238,7 +237,7 @@ const LoginScreen = ({navigation, route}: any) => {
           </Pressable>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

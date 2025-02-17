@@ -10,11 +10,11 @@ import {
   Pressable,
   Animated,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+
 
 const PostDetailScreen = () => {
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -25,7 +25,7 @@ const PostDetailScreen = () => {
           <Text>Order Screen</Text>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

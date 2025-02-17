@@ -7,12 +7,11 @@ import {
   View,
   Pressable,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {BigHeartIcon} from '../components/Icons';
 
 const DeliveryCompleteScreen = ({navigation, route}: any) => {
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -75,7 +74,7 @@ const DeliveryCompleteScreen = ({navigation, route}: any) => {
           </Pressable>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

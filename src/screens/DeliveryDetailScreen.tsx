@@ -8,7 +8,6 @@ import {
   Pressable,
 } from 'react-native';
 import {LeftArrowIcon, ProfileIcon, ThreeDotIcon} from '../components/Icons';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetScrollView,
@@ -368,7 +367,7 @@ const DeliveryDetailScreen = ({navigation, route}: any) => {
     fetchMe();
   }, []);
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -1102,7 +1101,7 @@ const DeliveryDetailScreen = ({navigation, route}: any) => {
           isOwner={article?.user.id === user.id}
         />
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

@@ -12,7 +12,6 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {GMarkerIcon, MarkerIcon, XIcon} from '../components/Icons';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 import Geolocation from 'react-native-geolocation-service';
@@ -220,7 +219,7 @@ const DeliveryLocationScreen = ({navigation, route}: any) => {
   }, [selectedPlace]);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -467,7 +466,7 @@ const DeliveryLocationScreen = ({navigation, route}: any) => {
           </BottomSheetView>
         </BottomSheet>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

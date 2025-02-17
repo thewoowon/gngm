@@ -1,11 +1,10 @@
 import React from 'react';
-import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import MyCamera from '../components/MyCamera';
 
 const CameraScreen = () => {
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -14,7 +13,7 @@ const CameraScreen = () => {
       <SafeAreaView style={styles.backgroundStyle}>
         <MyCamera />
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

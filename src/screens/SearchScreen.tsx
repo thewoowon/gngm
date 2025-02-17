@@ -10,7 +10,6 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   EngravingIcon,
   AcrylIcon,
@@ -125,7 +124,7 @@ const SearchScreen = ({navigation, route}: any) => {
   }, [debouncedSearchString]);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -379,7 +378,7 @@ const SearchScreen = ({navigation, route}: any) => {
           )}
         </ScrollView>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

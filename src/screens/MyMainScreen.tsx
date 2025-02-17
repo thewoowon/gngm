@@ -8,7 +8,6 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   ProfileIcon,
   RingIcon,
@@ -23,6 +22,7 @@ import {useAuth, useDelivery, useMe} from '../hooks';
 import {Delivery, User} from '../types/get';
 import {useFocusEffect} from '@react-navigation/native';
 import {confirm} from '../utils/alert';
+import WithdrawModal from '../components/WithdrawModal';
 
 const MyMainScreen = ({navigation, route}: any) => {
   const {getMe} = useMe();
@@ -46,6 +46,7 @@ const MyMainScreen = ({navigation, route}: any) => {
   });
 
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
+  const [isVisible, setIsVisible] = useState(false);
 
   const menu: {
     title: string;
@@ -103,6 +104,10 @@ const MyMainScreen = ({navigation, route}: any) => {
     logout();
   };
 
+  const handleWithdraw = () => {
+    setIsVisible(true);
+  };
+
   useEffect(() => {
     fetchMe();
   }, []);
@@ -115,7 +120,7 @@ const MyMainScreen = ({navigation, route}: any) => {
   );
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#6a51ae"
@@ -372,9 +377,21 @@ const MyMainScreen = ({navigation, route}: any) => {
               로그아웃
             </Text>
           </Pressable>
+          <Pressable onPress={handleWithdraw}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: 'Pretendard-Regular',
+                lineHeight: 22,
+                color: '#6E7881',
+              }}>
+              회원탈퇴
+            </Text>
+          </Pressable>
         </View>
+        <WithdrawModal isVisible={isVisible} setIsVisible={setIsVisible} />
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 
