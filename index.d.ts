@@ -7,6 +7,7 @@ declare module '@env' {
   export const GOOGLE_IOS_URL_SCHEME: string;
   export const GOOGLE_AOS_CLIENT_ID: string;
   export const GOOGLE_SHA1: string;
+  export const API_URL: string;
 }
 
 declare module '*.svg' {
