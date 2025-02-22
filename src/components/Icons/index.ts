@@ -49,3 +49,4 @@ export {default as ChatIcon} from './ChatIcon';
 export {default as TimerIcon} from './TimerIcon';
 export {default as ThreeDotIcon} from './ThreeDotIcon';
 export {default as UpArrowIcon} from './UpArrowIcon';
+export {default as AppleIcon} from './AppleIcon';
