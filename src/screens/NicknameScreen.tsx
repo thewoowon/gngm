@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -16,6 +16,14 @@ import {API_PREFIX} from '../constants';
 import {useDebounce} from '../hooks';
 import customAxios from '../axios/customAxios';
 import {getAccessToken} from '../services/auth/token';
+import Toast from 'react-native-toast-message';
+import BottomSheet, {
+  BottomSheetView,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
+import {useSharedValue} from 'react-native-reanimated';
+import Markdown from 'react-native-markdown-display';
+import {TERMS_OF_SERVICE, PRIVACY_POLICY} from '../constants/index';
 
 const BASE_URL = Platform.select({
   ios: 'http://127.0.0.1:8000', // iOS 시뮬레이터
@@ -28,6 +36,20 @@ const NicknameScreen = ({navigation, route}: any) => {
   const {setIsAuthenticated} = useAuth();
   const [isNicknameValid, setIsNicknameValid] = useState(false);
   const debouncedString = useDebounce(nickname, 500);
+  const [agree, setAgree] = useState(false);
+  const [docsContext, setDocsContext] = useState({
+    title: '이용약관',
+    content: '',
+  });
+
+  // BottomSheet 애니메이션 값을 관리하는 shared value
+  const bottomSheetTranslateY = useSharedValue(0);
+
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // 바텀 시트의 snap 포인트 정의
+  const snapPoints = useMemo(() => [650], []);
 
   const onChangeText = async (text: string) => {
     setNickname(text);
@@ -65,7 +87,27 @@ const NicknameScreen = ({navigation, route}: any) => {
     setWarning('사용할 수 있는 닉네임입니다');
     return true;
   };
+
   const onComplete = async () => {
+    if (!isNicknameValid) {
+      Toast.show({
+        position: 'top',
+        type: 'custom_type',
+        text1:
+          '닉네임은 최소 2글자 이상이어야 하며, 중복되지 않아야 합니다. 비속어는 포함할 수 없습니다',
+      });
+      return;
+    }
+
+    if (!agree) {
+      Toast.show({
+        position: 'top',
+        type: 'custom_type',
+        text1: '이용약관과 개인정보보호처리방침에 동의해주세요',
+      });
+      return;
+    }
+
     const accessToken = await getAccessToken();
     if (isNicknameValid) {
       const response = await customAxios.put(
@@ -85,6 +127,26 @@ const NicknameScreen = ({navigation, route}: any) => {
         setIsAuthenticated(true);
       }
     }
+  };
+
+  const onCheck = () => {
+    setAgree(!agree);
+  };
+
+  const onPressTerms = () => {
+    setDocsContext({
+      title: '이용약관',
+      content: TERMS_OF_SERVICE,
+    });
+    bottomSheetRef.current?.snapToIndex(0);
+  };
+
+  const onPressPrivacy = () => {
+    setDocsContext({
+      title: '개인정보보호처리방침',
+      content: PRIVACY_POLICY,
+    });
+    bottomSheetRef.current?.snapToIndex(0);
   };
 
   useEffect(() => {
@@ -161,18 +223,35 @@ const NicknameScreen = ({navigation, route}: any) => {
           style={{
             width: '100%',
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             paddingTop: 16,
             paddingBottom: 16,
             paddingLeft: 20,
             paddingRight: 20,
-            gap: 7,
+            gap: 16,
           }}>
+          <View style={styles.termsBox}>
+            <Pressable onPress={onCheck} style={styles.checkBox}>
+              {agree ? (
+                <Text style={{fontSize: 10, color: '#1CD7AE'}}>✔️</Text>
+              ) : null}
+            </Pressable>
+            <Text style={styles.termsText}>
+              가는김에의{' '}
+              <Pressable onPress={onPressTerms} style={styles.termsPressable}>
+                <Text style={styles.termsLink}>이용약관</Text>
+              </Pressable>
+              과
+              <Pressable onPress={onPressPrivacy} style={styles.termsPressable}>
+                <Text style={styles.termsLink}>개인정보보호처리방침</Text>
+              </Pressable>
+              에 대해 동의합니다.
+            </Text>
+          </View>
           <Pressable
             onPress={onComplete}
-            disabled={!isNicknameValid}
             style={({pressed}) => [
               {
                 width: '100%',
@@ -195,6 +274,47 @@ const NicknameScreen = ({navigation, route}: any) => {
             </Text>
           </Pressable>
         </View>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          handleIndicatorStyle={{backgroundColor: '#E6EAED'}}
+          snapPoints={snapPoints}
+          enablePanDownToClose
+          enableDynamicSizing={false}
+          onAnimate={(fromIndex, toIndex) => {
+            if (toIndex === 0) {
+              bottomSheetTranslateY.value = -snapPoints[toIndex] + 10;
+            } else {
+              bottomSheetTranslateY.value = 0;
+            }
+          }}>
+          <BottomSheetView>
+            <View
+              style={{
+                paddingLeft: 20,
+                paddingTop: 8,
+                paddingBottom: 20,
+              }}>
+              <Text
+                style={{
+                  color: '#00434E',
+                  fontSize: 17,
+                  fontFamily: 'Pretendard-SemiBold',
+                }}>
+                {docsContext.title}
+              </Text>
+            </View>
+          </BottomSheetView>
+          <BottomSheetScrollView
+            contentContainerStyle={{
+              gap: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingBottom: 20,
+            }}>
+            <Markdown>{docsContext.content}</Markdown>
+          </BottomSheetScrollView>
+        </BottomSheet>
       </SafeAreaView>
     </View>
   );
@@ -273,6 +393,45 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     lineHeight: 22,
     paddingLeft: 8,
+  },
+  termsBox: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    gap: 6,
+  },
+  termsPressable: {
+    height: 14,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  termsText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#8E979E',
+    fontFamily: 'Pretendard-Regular',
+  },
+  termsLink: {
+    fontSize: 14,
+    color: '#1CD7AE',
+    fontFamily: 'Pretendard-Regular',
+    textDecorationLine: 'underline',
+    marginLeft: 4,
+  },
+  checkBox: {
+    width: 16,
+    height: 16,
+    borderRadius: 2,
+    borderWidth: 1,
+    borderColor: '#C7CDD1',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 4,
   },
 });
 

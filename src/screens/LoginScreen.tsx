@@ -8,15 +8,15 @@ import {
   Text,
   Pressable,
   Platform,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {GoogleIcon, KakaoIcon, NaverIcon} from '../components/Icons';
+import {AppleIcon, GoogleIcon, KakaoIcon, NaverIcon} from '../components/Icons';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import axios from 'axios';
-import {API_PREFIX} from '../constants';
 import Toast from 'react-native-toast-message';
 import {login} from '../services/auth';
 import {useAuth} from '../hooks';
@@ -97,6 +97,9 @@ const LoginScreen = ({navigation, route}: any) => {
   };
 
   const loginWithNaver = async () => {
+    // 준비중
+    Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
+    return;
     try {
       const {data} = await axios.get(
         `${BASE_URL}/auth/naver?is_selected=${isSelected ? 1 : 0}`,
@@ -113,9 +116,31 @@ const LoginScreen = ({navigation, route}: any) => {
   };
 
   const loginWithKakao = async () => {
+    // 준비중
+    Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
+    return;
     try {
       const {data} = await axios.get(
         `${BASE_URL}/auth/kakao?is_selected=${isSelected ? 1 : 0}`,
+      );
+
+      if (data.user.nickname) {
+        setIsAuthenticated(true);
+      } else {
+        navigation.navigate('Nickname');
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const loginWithApple = async () => {
+    // 준비중
+    Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
+    return;
+    try {
+      const {data} = await axios.get(
+        `${BASE_URL}/auth/apple?is_selected=${isSelected ? 1 : 0}`,
       );
 
       if (data.user.nickname) {
@@ -182,6 +207,21 @@ const LoginScreen = ({navigation, route}: any) => {
             </Text>
             <View style={styles.shortBar} />
           </View>
+          <Pressable
+            style={{
+              ...styles.button,
+              backgroundColor: 'black',
+              borderWidth: 1,
+              borderColor: '#000000',
+            }}
+            onPress={loginWithApple}>
+            <View style={styles.iconPosition}>
+              <AppleIcon />
+            </View>
+            <Text style={{...styles.buttonFont, color: 'white'}}>
+              애플로 계속하기
+            </Text>
+          </Pressable>
           <Pressable
             style={{
               ...styles.button,
