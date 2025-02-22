@@ -6,6 +6,7 @@ import InquiryDetailsScreen from './InquiryDetailsScreen';
 import ProfileEditScreen from './ProfileEditScreen';
 import CustomerServiceScreen from './CustomerServiceScreen';
 import AnnouncementScreen from './AnnouncementScreen';
+import NotificationScreen from './NotificationScreen';
 
 // 스택 필요
 
@@ -42,6 +43,11 @@ const MyScreen = () => {
       <MyStack.Screen
         name="Announcement"
         component={AnnouncementScreen}
+        options={{headerShown: false}}
+      />
+      <MyStack.Screen
+        name="Notification"
+        component={NotificationScreen}
         options={{headerShown: false}}
       />
     </MyStack.Navigator>
