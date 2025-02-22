@@ -6,8 +6,8 @@ module.exports = {
       {
         moduleName: '@env',
         path: `.env.${process.env.NODE_ENV || 'development'}`,
-        blacklist: null,
-        whitelist: null,
+        blocklist: null,
+        allowlist: null,
         safe: true,
         allowUndefined: true,
       },
