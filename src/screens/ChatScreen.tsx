@@ -338,9 +338,19 @@ const ChatScreen = ({navigation, route}: any) => {
             ) : (
               messages.map((message, index) => {
                 if (message.sender.id === user.id) {
-                  return <MyMessages key={index} messages={[message]} />;
+                  return (
+                    <MyMessages
+                      key={`${index}-${message.id}`}
+                      messages={[message]}
+                    />
+                  );
                 }
-                return <YourMessages key={index} messages={[message]} />;
+                return (
+                  <YourMessages
+                    key={`${index}-${message.id}`}
+                    messages={[message]}
+                  />
+                );
               })
             )}
           </View>
@@ -364,7 +374,7 @@ const ChatScreen = ({navigation, route}: any) => {
               }}>
               <TextInput
                 style={styles.input}
-                placeholder="메시지를 입력해주세요"
+                placeholder="메세지를 입력해주세요"
                 placeholderTextColor={'#8E979E'}
                 value={input}
                 onChangeText={text => {
