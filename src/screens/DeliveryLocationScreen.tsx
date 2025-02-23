@@ -147,7 +147,7 @@ const DeliveryLocationScreen = ({navigation, route}: any) => {
       if (Platform.OS === 'ios') {
         const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         if (status === RESULTS.GRANTED) {
-          await requestLocationAccuracy({purposeKey: 'common-purpose'});
+          await requestLocationAccuracy({purposeKey: 'commonPurpose'});
           getCurrentLocation();
         } else {
           Alert.alert(

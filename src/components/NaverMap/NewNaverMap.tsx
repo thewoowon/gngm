@@ -102,7 +102,7 @@ const NewNaverMap = ({
     const result = await check(permission);
     if (result === RESULTS.GRANTED) {
       setPermissionStatus('GRANTED');
-      await requestLocationAccuracy({purposeKey: 'common-purpose'});
+      await requestLocationAccuracy({purposeKey: 'commonPurpose'});
       getCurrentLocation();
     } else if (result === RESULTS.DENIED) {
       setPermissionStatus('DENIED');
@@ -122,7 +122,7 @@ const NewNaverMap = ({
         const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         if (status === RESULTS.GRANTED) {
           setPermissionStatus('GRANTED');
-          await requestLocationAccuracy({purposeKey: 'common-purpose'});
+          await requestLocationAccuracy({purposeKey: 'commonPurpose'});
           getCurrentLocation();
         } else {
           setPermissionStatus(status as 'DENIED' | 'BLOCKED' | 'UNAVAILABLE');
