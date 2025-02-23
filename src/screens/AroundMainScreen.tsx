@@ -83,6 +83,7 @@ const AroundMainScreen = ({navigation, route}: any) => {
   };
 
   const openBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
+  const closeBottomSheet = () => bottomSheetRef.current?.close();
 
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
@@ -137,6 +138,7 @@ const AroundMainScreen = ({navigation, route}: any) => {
           isLoading={isLoading}
           currentLocation={currentLocation}
           openBottomSheet={openBottomSheet}
+          closeBottomSheet={closeBottomSheet}
           getCurrentLocation={getCurrentLocation}
           setIsLoading={setIsLoading}
           markers={articles.map(article => {
