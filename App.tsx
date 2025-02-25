@@ -9,6 +9,7 @@ import RootNavigator from './src/navigation/RootNavigator';
 import {useAuth} from './src/hooks';
 import MyCustomToast from './src/components/MyCustomToast';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {PermissionProvider} from './src/contexts/PermissionContext';
 
 // Custom ToastConfig
 const toastConfig: ToastConfig = {
@@ -74,7 +75,9 @@ function App(): React.JSX.Element {
 export default function RootApp() {
   return (
     <AuthProvider>
-      <App />
+      <PermissionProvider>
+        <App />
+      </PermissionProvider>
     </AuthProvider>
   );
 }
