@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -67,10 +67,6 @@ const ProfileEditScreen = ({navigation, route}: any) => {
       setIsEnabled(data.is_job_open === 1);
     }
   };
-
-  useEffect(() => {
-    fetchMe();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {

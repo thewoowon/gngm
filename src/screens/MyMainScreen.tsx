@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -107,10 +107,6 @@ const MyMainScreen = ({navigation, route}: any) => {
   const handleWithdraw = () => {
     setIsVisible(true);
   };
-
-  useEffect(() => {
-    fetchMe();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {

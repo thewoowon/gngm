@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -8,7 +8,6 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
-import {NOTIFICATION_DATA} from '../data';
 import {AlarmIcon, LeftArrowIcon} from '../components/Icons';
 import {useNotification} from '../hooks';
 import {Notification} from '../types/get';
@@ -23,10 +22,6 @@ const NotificationScreen = ({navigation, route}: any) => {
     const notifications = await findAllNotifications();
     setNotifications(notifications);
   };
-
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {

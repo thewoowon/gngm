@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -78,10 +78,6 @@ const StoreInfoScreen = ({navigation, route}: any) => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchReviewData();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
