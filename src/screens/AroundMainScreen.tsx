@@ -8,7 +8,6 @@ import {
   View,
   TextInput,
   Pressable,
-  Alert,
 } from 'react-native';
 import BottomSheet, {
   BottomSheetView,
@@ -26,6 +25,8 @@ import Geolocation from 'react-native-geolocation-service';
 import {Article} from '../types/get';
 import ArticleBottomView from '../components/ArticleBottomView';
 import {useFocusEffect} from '@react-navigation/native';
+import {requestLocationAccuracy, RESULTS} from 'react-native-permissions';
+import {usePermission} from '../contexts';
 
 const AroundMainScreen = ({navigation, route}: any) => {
   const [text, setText] = useState('');
@@ -37,6 +38,7 @@ const AroundMainScreen = ({navigation, route}: any) => {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUnread, setIsUnread] = useState(false);
+  const {locationPermission, fetchPermission} = usePermission();
 
   // BottomSheet 애니메이션 값을 관리하는 shared value
   const bottomSheetTranslateY = useSharedValue(0);
@@ -71,8 +73,9 @@ const AroundMainScreen = ({navigation, route}: any) => {
   );
 
   const fetchArticles = async () => {
+    // currentLocation이 있을 수도 있다.
     if (!currentLocation) {
-      getCurrentLocation();
+      await getCurrentLocation();
     }
     const response = await findAroundArticles({
       latitude: currentLocation?.latitude || 37.5665,
@@ -85,23 +88,34 @@ const AroundMainScreen = ({navigation, route}: any) => {
   const openBottomSheet = () => bottomSheetRef.current?.snapToIndex(0);
   const closeBottomSheet = () => bottomSheetRef.current?.close();
 
-  const getCurrentLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position.coords;
-        setCurrentLocation({latitude, longitude});
-        setIsLoading(false);
-      },
-      () => {
-        // Alert.alert('위치 오류', '현재 위치를 가져올 수 없습니다.');
-        setIsLoading(false);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-      },
-    );
+  const getCurrentLocation = async () => {
+    if (locationPermission === RESULTS.DENIED) {
+      // 권한 요청
+      await fetchPermission();
+      return;
+    }
+    // 정확한 위치를 요청 (iOS의 경우 prompt 발생)
+    await requestLocationAccuracy({purposeKey: 'commonPurpose'});
+
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position.coords;
+          setCurrentLocation({latitude, longitude});
+          resolve({latitude, longitude});
+        },
+        error => {
+          console.error(error);
+          setIsLoading(false);
+          reject(error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 10000,
+        },
+      );
+    });
   };
 
   const fetchNotifications = async () => {
@@ -112,18 +126,18 @@ const AroundMainScreen = ({navigation, route}: any) => {
     setIsUnread(unread);
   };
 
-  // 네이버 지도에서 사용자의 위치를 받아오는 함수
-  // 네이버 지도에 실시간 위치를 받아오기
-  useEffect(() => {
-    fetchArticles();
-    fetchNotifications();
-  }, []);
-
+  // fetchArticles가 매번 실행되어야 하므로 useFocusEffect 사용
+  // fetchArticles는 getCurrentLocation을 전제로 하므로
   useFocusEffect(
     useCallback(() => {
-      fetchArticles();
+      console.log('locationPermissionhello:', locationPermission);
+      const initPermissionsAndFetch = async () => {
+        if (locationPermission === RESULTS.GRANTED) await fetchArticles();
+        else await fetchPermission();
+      };
+      initPermissionsAndFetch();
       fetchNotifications();
-    }, []),
+    }, [locationPermission]),
   );
 
   return (
@@ -137,9 +151,9 @@ const AroundMainScreen = ({navigation, route}: any) => {
         <NewNaverMap
           isLoading={isLoading}
           currentLocation={currentLocation}
+          getCurrentLocation={getCurrentLocation}
           openBottomSheet={openBottomSheet}
           closeBottomSheet={closeBottomSheet}
-          getCurrentLocation={getCurrentLocation}
           setIsLoading={setIsLoading}
           markers={articles.map(article => {
             return {
