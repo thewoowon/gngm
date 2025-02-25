@@ -6,28 +6,18 @@ import {
   NaverMapViewRef,
   CameraChangeReason,
 } from '@mj-studio/react-native-naver-map';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
-  Platform,
-  Alert,
   ActivityIndicator,
   Text,
   Pressable,
 } from 'react-native';
-import {
-  RESULTS,
-  PERMISSIONS,
-  request,
-  check,
-  requestLocationAccuracy,
-  requestMultiple,
-  openSettings,
-} from 'react-native-permissions';
+import {RESULTS} from 'react-native-permissions';
 import {DeliveryMarkerIcon} from '../Icons';
 import {ArticleType} from '../../types/get';
-import {useFocusEffect} from '@react-navigation/native';
+import {usePermission} from '../../contexts';
 
 type NewNaverMapProps = {
   openBottomSheet: () => void;
@@ -75,9 +65,7 @@ const NewNaverMap = ({
   const zoomControls = false;
   const extentBoundedInKorea = true;
 
-  const [permissionStatus, setPermissionStatus] = useState<
-    'DENIED' | 'GRANTED' | 'BLOCKED' | 'UNAVAILABLE'
-  >('GRANTED');
+  const {locationPermission} = usePermission();
 
   const onInitialized = () => {
     setIsLoading(false);
@@ -91,83 +79,6 @@ const NewNaverMap = ({
     }
   };
 
-  /** 🔹 위치 권한 확인 및 요청 */
-  const checkLocationPermission = useCallback(async () => {
-    const permission = Platform.select({
-      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-    });
-    if (!permission) return;
-
-    const result = await check(permission);
-    if (result === RESULTS.GRANTED) {
-      setPermissionStatus('GRANTED');
-      await requestLocationAccuracy({purposeKey: 'commonPurpose'});
-      getCurrentLocation();
-    } else if (result === RESULTS.DENIED) {
-      setPermissionStatus('DENIED');
-      requestLocationPermission();
-    } else if (result === RESULTS.BLOCKED) {
-      setPermissionStatus('BLOCKED');
-    } else if (result === RESULTS.UNAVAILABLE) {
-      setPermissionStatus('UNAVAILABLE');
-    } else {
-      setPermissionStatus('DENIED');
-    }
-  }, [getCurrentLocation]);
-
-  const requestLocationPermission = async () => {
-    try {
-      if (Platform.OS === 'ios') {
-        const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-        if (status === RESULTS.GRANTED) {
-          setPermissionStatus('GRANTED');
-          await requestLocationAccuracy({purposeKey: 'commonPurpose'});
-          getCurrentLocation();
-        } else {
-          setPermissionStatus(status as 'DENIED' | 'BLOCKED' | 'UNAVAILABLE');
-          Alert.alert(
-            '권한 필요',
-            '위치 권한을 허용해야 지도를 사용할 수 있습니다.',
-          );
-          openSettings();
-        }
-      } else if (Platform.OS === 'android') {
-        const statuses = await requestMultiple([
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-          PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-        ]);
-        if (
-          statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-            RESULTS.GRANTED ||
-          statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
-            RESULTS.GRANTED
-        ) {
-          setPermissionStatus('GRANTED');
-          getCurrentLocation();
-        } else {
-          if (
-            statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-              RESULTS.BLOCKED ||
-            statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
-              RESULTS.BLOCKED
-          ) {
-            setPermissionStatus('BLOCKED');
-          } else {
-            setPermissionStatus('DENIED');
-          }
-          Alert.alert(
-            '권한 필요',
-            '위치 권한을 허용해야 지도를 사용할 수 있습니다.',
-          );
-          openSettings();
-        }
-      }
-    } catch (error) {
-      console.error('권한 요청 오류:', error);
-    }
-  };
-
   const onTapAndFollow = (latitude: number, longitude: number) => {
     ref.current?.setLocationTrackingMode('Follow');
     ref.current?.animateCameraTo({
@@ -177,18 +88,6 @@ const NewNaverMap = ({
     });
     openBottomSheet();
   };
-
-  // 최초 마운트 시 권한 확인
-  useEffect(() => {
-    checkLocationPermission();
-  }, [checkLocationPermission]);
-
-  // 화면 포커스 시 권한 재확인
-  useFocusEffect(
-    useCallback(() => {
-      checkLocationPermission();
-    }, [checkLocationPermission]),
-  );
 
   useEffect(() => {
     ref.current?.setLocationTrackingMode('Follow');
@@ -206,36 +105,6 @@ const NewNaverMap = ({
       });
     }
   }, [currentLocation]);
-
-  if (permissionStatus === 'UNAVAILABLE') {
-    return (
-      <View style={styles.container}>
-        <View style={styles.center}>
-          <Text>이 기능은 사용할 수 없습니다.</Text>
-        </View>
-      </View>
-    );
-  }
-
-  if (permissionStatus === 'BLOCKED') {
-    return (
-      <View style={styles.container}>
-        <View style={styles.center}>
-          <Text>위치 권한이 차단되었습니다.</Text>
-        </View>
-      </View>
-    );
-  }
-
-  if (permissionStatus === 'DENIED') {
-    return (
-      <View style={styles.container}>
-        <View style={styles.center}>
-          <Text>위치 권한이 거부되었습니다.</Text>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
