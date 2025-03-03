@@ -65,8 +65,6 @@ const NewNaverMap = ({
   const zoomControls = false;
   const extentBoundedInKorea = true;
 
-  const {locationPermission} = usePermission();
-
   const onInitialized = () => {
     setIsLoading(false);
   };
