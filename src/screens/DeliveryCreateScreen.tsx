@@ -7,7 +7,9 @@ import {
   View,
   TextInput,
   Pressable,
-  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import {
   MarkerIcon,
@@ -655,127 +657,176 @@ const DeliveryCreateScreen = ({navigation, route}: any) => {
             onPress={() => setSelectedTab('Tab3')}
           />
         </View>
-        <View style={styles.content}>{renderContent(deliveryType)}</View>
-        <View style={styles.buttonContainer}>
-          {selectedTab !== 'Tab1' && (
+        {/* KeyboardAvoidingView 적용 */}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}>
+          {/* renderContent만 ScrollView로 감싸기 */}
+          <ScrollView
+            contentContainerStyle={{flexGrow: 1, paddingBottom: 20}}
+            keyboardShouldPersistTaps="handled">
+            <View style={styles.content}>{renderContent(deliveryType)}</View>
+          </ScrollView>
+          <View style={styles.buttonContainer}>
+            {selectedTab !== 'Tab1' && (
+              <Pressable
+                onPress={prevHandler}
+                style={({pressed}) => [
+                  {
+                    width: 112,
+                    padding: 16,
+                    borderRadius: 6,
+                    backgroundColor: '#EDFCF9',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 48,
+                  },
+                  {backgroundColor: pressed ? '#E9FAF7' : '#EDFCF9'},
+                ]}>
+                <Text
+                  style={{
+                    color: '#1CD7AE',
+                    fontSize: 16,
+                    fontFamily: 'Pretendard-Medium',
+                  }}>
+                  이전
+                </Text>
+              </Pressable>
+            )}
             <Pressable
-              onPress={prevHandler}
+              disabled={discreteDisabled()}
+              onPress={buttonHandler}
               style={({pressed}) => [
                 {
-                  width: 112,
+                  flex: 1.5,
                   padding: 16,
                   borderRadius: 6,
-                  backgroundColor: '#EDFCF9',
+                  backgroundColor: '#1CD7AE',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
                   height: 48,
                 },
-                {backgroundColor: pressed ? '#E9FAF7' : '#EDFCF9'},
+                {
+                  backgroundColor: discreteDisabled()
+                    ? '#E6EAED'
+                    : pressed
+                    ? '#0BBDA1'
+                    : '#1CD7AE',
+                },
               ]}>
               <Text
                 style={{
-                  color: '#1CD7AE',
-                  fontSize: 16,
-                  fontFamily: 'Pretendard-Medium',
-                }}>
-                이전
-              </Text>
-            </Pressable>
-          )}
-          <Pressable
-            disabled={discreteDisabled()}
-            onPress={buttonHandler}
-            style={({pressed}) => [
-              {
-                flex: 1.5,
-                padding: 16,
-                borderRadius: 6,
-                backgroundColor: '#1CD7AE',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 48,
-              },
-              {
-                backgroundColor: discreteDisabled()
-                  ? '#E6EAED'
-                  : pressed
-                  ? '#0BBDA1'
-                  : '#1CD7AE',
-              },
-            ]}>
-            <Text
-              style={{
-                color: discreteDisabled() ? '#B1BAC0' : '#FFFFFF',
-                fontSize: 16,
-                fontFamily: 'Pretendard-SemiBold',
-              }}>
-              {selectedTab === 'Tab3' ? '완료' : '다음'}
-            </Text>
-          </Pressable>
-        </View>
-        <BottomSheet
-          ref={bottomSheetRef}
-          // BottomSheet는 처음에 펼쳐진 상태로 시작
-          index={-1}
-          // 일단 스냅 포인트는 300, 550으로 설정
-          handleIndicatorStyle={{
-            display: 'none',
-          }}
-          containerStyle={{
-            zIndex: 3,
-          }}
-          // dim 처리
-          snapPoints={snapPoints}
-          enablePanDownToClose
-          enableDynamicSizing={false}
-          onAnimate={(fromIndex, toIndex) => {
-            if (toIndex === 0) {
-              setCurrentIndex(0);
-              bottomSheetTranslateY.value = 0;
-            } else {
-              setCurrentIndex(-1);
-              bottomSheetTranslateY.value = 0;
-            }
-            ``;
-          }}>
-          <BottomSheetView
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              paddingLeft: 20,
-              paddingRight: 20,
-              paddingTop: 6,
-              paddingBottom: 20,
-            }}>
-            <View
-              style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 16,
-              }}>
-              <Text
-                style={{
+                  color: discreteDisabled() ? '#B1BAC0' : '#FFFFFF',
                   fontSize: 16,
                   fontFamily: 'Pretendard-SemiBold',
-                  color: '#1B1B1B',
-                  lineHeight: 24,
                 }}>
-                {selectedTab === 'Tab1' ? '날짜 선택' : '기간 선택'}
+                {selectedTab === 'Tab3' ? '완료' : '다음'}
               </Text>
-              <Pressable
-                onPress={() => {
-                  bottomSheetRef.current?.close();
+            </Pressable>
+          </View>
+          <BottomSheet
+            ref={bottomSheetRef}
+            // BottomSheet는 처음에 펼쳐진 상태로 시작
+            index={-1}
+            // 일단 스냅 포인트는 300, 550으로 설정
+            handleIndicatorStyle={{
+              display: 'none',
+            }}
+            containerStyle={{
+              zIndex: 3,
+            }}
+            // dim 처리
+            snapPoints={snapPoints}
+            enablePanDownToClose
+            enableDynamicSizing={false}
+            onAnimate={(fromIndex, toIndex) => {
+              if (toIndex === 0) {
+                setCurrentIndex(0);
+                bottomSheetTranslateY.value = 0;
+              } else {
+                setCurrentIndex(-1);
+                bottomSheetTranslateY.value = 0;
+              }
+              ``;
+            }}>
+            <BottomSheetView
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: 20,
+                paddingRight: 20,
+                paddingTop: 6,
+                paddingBottom: 20,
+              }}>
+              <View
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 16,
                 }}>
-                <XIcon />
-              </Pressable>
-            </View>
-            {selectedTab === 'Tab2' && (
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: 'Pretendard-SemiBold',
+                    color: '#1B1B1B',
+                    lineHeight: 24,
+                  }}>
+                  {selectedTab === 'Tab1' ? '날짜 선택' : '기간 선택'}
+                </Text>
+                <Pressable
+                  onPress={() => {
+                    bottomSheetRef.current?.close();
+                  }}>
+                  <XIcon />
+                </Pressable>
+              </View>
+              {selectedTab === 'Tab2' && (
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    gap: 16,
+                  }}>
+                  <TextInput
+                    readOnly
+                    style={styles.baseInput}
+                    value={pStartDate.replaceAll('-', ' / ')}
+                  />
+                  <TextInput
+                    readOnly
+                    style={styles.baseInput}
+                    value={pEndDate.replaceAll('-', ' / ')}
+                  />
+                </View>
+              )}
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: 380,
+                }}>
+                {selectedTab === 'Tab1' && (
+                  <CustomCalendar
+                    startDate={departureDate}
+                    setStartDate={setDepartureDate}
+                  />
+                )}
+                {selectedTab === 'Tab2' && (
+                  <PeriodCalendar
+                    startDate={pStartDate}
+                    endDate={pEndDate}
+                    setStartDate={setPStartDate}
+                    setEndDate={setPEndDate}
+                  />
+                )}
+              </View>
               <View
                 style={{
                   display: 'flex',
@@ -783,84 +834,45 @@ const DeliveryCreateScreen = ({navigation, route}: any) => {
                   justifyContent: 'center',
                   gap: 16,
                 }}>
-                <TextInput
-                  readOnly
-                  style={styles.baseInput}
-                  value={pStartDate.replaceAll('-', ' / ')}
-                />
-                <TextInput
-                  readOnly
-                  style={styles.baseInput}
-                  value={pEndDate.replaceAll('-', ' / ')}
-                />
+                {selectedTab === 'Tab1' && (
+                  <TextInput
+                    readOnly
+                    style={styles.baseInput}
+                    value={departureDate.replaceAll('-', ' / ')}
+                  />
+                )}
+                <Pressable
+                  onPress={confirmHandler}
+                  style={({pressed}) => [
+                    styles.baseButton,
+                    {backgroundColor: pressed ? '#0BBDA1' : '#1CD7AE'},
+                  ]}>
+                  <Text
+                    style={{
+                      color: '#FFFFFF',
+                      fontSize: 16,
+                      fontFamily: 'Pretendard-SemiBold',
+                    }}>
+                    확인
+                  </Text>
+                </Pressable>
               </View>
-            )}
-            <View
-              style={{
-                flex: 1,
-                width: '100%',
-                height: 380,
-              }}>
-              {selectedTab === 'Tab1' && (
-                <CustomCalendar
-                  startDate={departureDate}
-                  setStartDate={setDepartureDate}
-                />
-              )}
-              {selectedTab === 'Tab2' && (
-                <PeriodCalendar
-                  startDate={pStartDate}
-                  endDate={pEndDate}
-                  setStartDate={setPStartDate}
-                  setEndDate={setPEndDate}
-                />
-              )}
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: 16,
-              }}>
-              {selectedTab === 'Tab1' && (
-                <TextInput
-                  readOnly
-                  style={styles.baseInput}
-                  value={departureDate.replaceAll('-', ' / ')}
-                />
-              )}
-              <Pressable
-                onPress={confirmHandler}
-                style={({pressed}) => [
-                  styles.baseButton,
-                  {backgroundColor: pressed ? '#0BBDA1' : '#1CD7AE'},
-                ]}>
-                <Text
-                  style={{
-                    color: '#FFFFFF',
-                    fontSize: 16,
-                    fontFamily: 'Pretendard-SemiBold',
-                  }}>
-                  확인
-                </Text>
-              </Pressable>
-            </View>
-          </BottomSheetView>
-        </BottomSheet>
-        {/* dim 처리 */}
-        <Animated.View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            zIndex: 2,
-            // bottomSheetRef가 열리면 dim 처리
-            display: currentIndex === 0 ? 'flex' : 'none',
-          }}
-          onTouchStart={() => {
-            bottomSheetRef.current?.close();
-          }}
-        />
+            </BottomSheetView>
+          </BottomSheet>
+          {/* dim 처리 */}
+          <Animated.View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              zIndex: 2,
+              // bottomSheetRef가 열리면 dim 처리
+              display: currentIndex === 0 ? 'flex' : 'none',
+            }}
+            onTouchStart={() => {
+              bottomSheetRef.current?.close();
+            }}
+          />
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );
