@@ -21,6 +21,7 @@ import Toast from 'react-native-toast-message';
 import {login} from '../services/auth';
 import {useAuth} from '../hooks';
 import customAxios from '../axios/customAxios';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 
 const BASE_URL = Platform.select({
   ios: 'http://127.0.0.1:8000', // iOS 시뮬레이터
@@ -57,7 +58,7 @@ const LoginScreen = ({navigation, route}: any) => {
         const userInfo = await GoogleSignin.signIn();
 
         // 서버로 토큰 전달
-        const response = await customAxios.post(`/auth/google/`, {
+        const response = await customAxios.post(`/auth/google`, {
           id_token: userInfo.data?.idToken,
           is_selected: isSelected ? 1 : 0,
         });
@@ -139,14 +140,82 @@ const LoginScreen = ({navigation, route}: any) => {
     Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
     return;
     try {
-      const {data} = await axios.get(
-        `${BASE_URL}/auth/apple?is_selected=${isSelected ? 1 : 0}`,
-      );
+      // performs login request
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        // Note: it appears putting FULL_NAME first is important, see issue #293
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+      });
 
-      if (data.user.nickname) {
-        setIsAuthenticated(true);
-      } else {
-        navigation.navigate('Nickname');
+      if (!appleAuthRequestResponse.identityToken) {
+        throw new Error('Apple Sign-In failed - No identity token');
+      }
+
+      // Apple에서 받은 데이터
+      const {identityToken, user, authorizationCode} = appleAuthRequestResponse;
+
+      console.log('Apple Sign-In response: ', appleAuthRequestResponse);
+      console.log(identityToken);
+      console.log(user);
+      console.log(authorizationCode);
+
+      // get current authentication state for user
+      // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+      const credentialState = await appleAuth.getCredentialStateForUser(user);
+
+      // use credentialState response to ensure the user is authenticated
+      if (credentialState === appleAuth.State.AUTHORIZED) {
+        // user is authenticated
+        const response = await customAxios.post(`/auth/apple`, {
+          identityToken,
+          authorizationCode,
+        });
+
+        if (response.status === 200) {
+          await login({
+            access_token: response.data.access_token,
+            refresh_token: response.data.refresh_token,
+          });
+          Toast.show({
+            position: 'bottom',
+            type: 'custom_type',
+            text1: '로그인 성공',
+          });
+
+          if (!response.data.user.nickname) {
+            navigation.navigate('Nickname');
+          } else {
+            setIsAuthenticated(true);
+          }
+        }
+
+        console.log('Authorized');
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const onPressWithoutLogin = async () => {
+    try {
+      const response = await customAxios.post(`/auth/guest`);
+
+      if (response.status === 200) {
+        await login({
+          access_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+        });
+        Toast.show({
+          position: 'bottom',
+          type: 'custom_type',
+          text1: '로그인 성공',
+        });
+
+        if (!response.data.user.nickname) {
+          navigation.navigate('Nickname');
+        } else {
+          setIsAuthenticated(true);
+        }
       }
     } catch (error: any) {
       console.log(error);
@@ -213,6 +282,7 @@ const LoginScreen = ({navigation, route}: any) => {
               backgroundColor: 'black',
               borderWidth: 1,
               borderColor: '#000000',
+              display: Platform.OS === 'ios' ? 'flex' : 'none',
             }}
             onPress={loginWithApple}>
             <View style={styles.iconPosition}>
@@ -261,18 +331,14 @@ const LoginScreen = ({navigation, route}: any) => {
               <Text>{isSelected ? '로그인 유지' : '선택안됨'}</Text>
             </Pressable>
           </View> */}
-          <Pressable
-            style={{...styles.button}}
-            onPress={() => {
-              setIsAuthenticated(true);
-            }}>
+          <Pressable style={{...styles.button}} onPress={onPressWithoutLogin}>
             <Text
               style={{
                 color: '#8E979E',
                 fontSize: 14,
                 fontFamily: 'Prentendard-Regular',
               }}>
-              로그인없이 둘러보기
+              로그인 없이 둘러보기
             </Text>
           </Pressable>
         </View>
