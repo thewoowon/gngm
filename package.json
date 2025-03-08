@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5",
+    "@invertase/react-native-apple-authentication": "^2.4.0",
     "@mj-studio/react-native-naver-map": "1.5.10",
     "@react-native-google-signin/google-signin": "latest",
     "@react-navigation/bottom-tabs": "^7.2.0",
