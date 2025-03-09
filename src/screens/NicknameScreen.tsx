@@ -25,11 +25,6 @@ import {useSharedValue} from 'react-native-reanimated';
 import Markdown from 'react-native-markdown-display';
 import {TERMS_OF_SERVICE, PRIVACY_POLICY} from '../constants/index';
 
-const BASE_URL = Platform.select({
-  ios: 'http://127.0.0.1:8000', // iOS 시뮬레이터
-  android: 'http://127.0.0.1:8000', // Android 에뮬레이터
-});
-
 const NicknameScreen = ({navigation, route}: any) => {
   const [nickname, setNickname] = useState('');
   const [warning, setWarning] = useState('');
@@ -68,9 +63,7 @@ const NicknameScreen = ({navigation, route}: any) => {
       return false;
     }
 
-    const response = await axios.get(
-      `${BASE_URL}${API_PREFIX}/users/nickname/${nickname}`,
-    );
+    const response = await customAxios.get(`/users/nickname/${nickname}`);
 
     if (!response.data.is_available) {
       setWarning('존재하는 닉네임입니다');
@@ -111,7 +104,7 @@ const NicknameScreen = ({navigation, route}: any) => {
     const accessToken = await getAccessToken();
     if (isNicknameValid) {
       const response = await customAxios.put(
-        `${BASE_URL}${API_PREFIX}/users/update`,
+        `/users/update`,
         {
           nickname,
         },

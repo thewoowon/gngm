@@ -136,9 +136,6 @@ const LoginScreen = ({navigation, route}: any) => {
   };
 
   const loginWithApple = async () => {
-    // 준비중
-    Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
-    return;
     try {
       // performs login request
       const appleAuthRequestResponse = await appleAuth.performRequest({
