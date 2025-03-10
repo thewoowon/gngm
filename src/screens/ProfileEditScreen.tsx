@@ -9,6 +9,9 @@ import {
   Pressable,
   Switch,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
 import {LeftArrowIcon} from '../components/Icons';
 import {useMe} from '../hooks';
@@ -93,88 +96,94 @@ const ProfileEditScreen = ({navigation, route}: any) => {
             <Text style={styles.saveText}>저장</Text>
           </Pressable>
         </View>
-        <View style={styles.flexColumn}>
-          <View style={styles.flexFull}>
-            <ProfileImageUploader
-              imageUri={user.src}
-              setImageUri={uri => {
-                setUser({
-                  ...user,
-                  src: uri || '',
-                });
-              }}
-            />
-          </View>
-          <View
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}>
-            <Text style={styles.labelText}>닉네임</Text>
-            <TextInput
-              style={styles.titleInput}
-              placeholder="닉네임을 입력해주세요"
-              value={user.nickname}
-              onChangeText={text => {
-                setUser({
-                  ...user,
-                  nickname: text,
-                });
-              }}
-            />
-          </View>
-          <View
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}>
-            <Text style={styles.labelText}>직업</Text>
-            <TextInput
-              style={styles.titleInput}
-              placeholder="직업을 입력해주세요"
-              value={user.job || ''}
-              onChangeText={text => {
-                setUser({
-                  ...user,
-                  job: text,
-                });
-              }}
-            />
-            <TextInput
-              style={styles.titleInput}
-              placeholder="직업에 대한 설명을 입력해주세요"
-              value={user.job_description || ''}
-              onChangeText={text => {
-                setUser({
-                  ...user,
-                  job_description: text,
-                });
-              }}
-            />
-          </View>
-          <View
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}>
-            <Text style={styles.labelText}>직업 공개 여부</Text>
-            <View style={styles.flexRow}>
-              <Text style={styles.tickLabel}>공개</Text>
-              <Switch
-                trackColor={{false: '#767577', true: '#1CD7AE'}}
-                thumbColor={isEnabled ? '#ffffff' : '#f4f3f4'}
-                onValueChange={toggleSwitch}
-                value={isEnabled}
-              />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}>
+          <ScrollView>
+            <View style={styles.flexColumn}>
+              <View style={styles.flexFull}>
+                <ProfileImageUploader
+                  imageUri={user.src}
+                  setImageUri={uri => {
+                    setUser({
+                      ...user,
+                      src: uri || '',
+                    });
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                }}>
+                <Text style={styles.labelText}>닉네임</Text>
+                <TextInput
+                  style={styles.titleInput}
+                  placeholder="닉네임을 입력해주세요"
+                  value={user.nickname}
+                  onChangeText={text => {
+                    setUser({
+                      ...user,
+                      nickname: text,
+                    });
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                }}>
+                <Text style={styles.labelText}>직업</Text>
+                <TextInput
+                  style={styles.titleInput}
+                  placeholder="직업을 입력해주세요"
+                  value={user.job || ''}
+                  onChangeText={text => {
+                    setUser({
+                      ...user,
+                      job: text,
+                    });
+                  }}
+                />
+                <TextInput
+                  style={styles.titleInput}
+                  placeholder="직업에 대한 설명을 입력해주세요"
+                  value={user.job_description || ''}
+                  onChangeText={text => {
+                    setUser({
+                      ...user,
+                      job_description: text,
+                    });
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                }}>
+                <Text style={styles.labelText}>직업 공개 여부</Text>
+                <View style={styles.flexRow}>
+                  <Text style={styles.tickLabel}>공개</Text>
+                  <Switch
+                    trackColor={{false: '#767577', true: '#1CD7AE'}}
+                    thumbColor={isEnabled ? '#ffffff' : '#f4f3f4'}
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                  />
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );

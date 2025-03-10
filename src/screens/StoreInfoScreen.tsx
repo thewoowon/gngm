@@ -164,7 +164,9 @@ const StoreInfoScreen = ({navigation, route}: any) => {
                     fontSize: 14,
                     fontFamily: 'Pretendard-Medium',
                   }}>{`${
-                  reviewContext.reviewAverage.toFixed(1) || '0.0'
+                  reviewContext.reviewAverage
+                    ? reviewContext.reviewAverage.toFixed(1)
+                    : '0.0'
                 } (후기 ${reviewContext.reviewCount}개)`}</Text>
               </Pressable>
               <View

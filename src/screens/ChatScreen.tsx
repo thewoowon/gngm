@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -8,11 +8,13 @@ import {
   TextInput,
   Pressable,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
 import {
   HomeIcon,
   LeftArrowIcon,
-  MiniUpChevronIcon,
   PlusIcon,
   UpArrowIcon,
 } from '../components/Icons';
@@ -20,167 +22,11 @@ import {Chat, Message, User} from '../types/get';
 import {useChat, useMe, useMessage} from '../hooks';
 import {MyMessages, YourMessages} from '../components/Messages';
 
-const CHAT_CONTEXT = [
-  {
-    id: 1,
-    message: '안녕하세요',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'thewoowon76@gmail.com',
-      id: 31,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'Hello duel',
-      name: '우원',
-      nickname: '고구마',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:22:30',
-    updated_at: '2025-02-08T10:22:30',
-  },
-  {
-    id: 2,
-    message: '안녕하세요',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'thewoowon76@gmail.com',
-      id: 31,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'Hello duel',
-      name: '우원',
-      nickname: '고구마',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:22:40',
-    updated_at: '2025-02-08T10:22:40',
-  },
-  {
-    id: 3,
-    message: '안녕하세요',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'thewoowon76@gmail.com',
-      id: 31,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'Hello duel',
-      name: '우원',
-      nickname: '고구마',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:22:59',
-    updated_at: '2025-02-08T10:22:59',
-  },
-  {
-    id: 4,
-    message: '제 이름은 고구마입니다',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'thewoowon76@gmail.com',
-      id: 31,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'Hello duel',
-      name: '우원',
-      nickname: '고구마',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:23:01',
-    updated_at: '2025-02-08T10:23:01',
-  },
-  {
-    id: 5,
-    message: '뒤지실래요?',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'jiwon@gmail.com',
-      id: 22,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'fuck',
-      name: '박지원',
-      nickname: '감자',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:24:30',
-    updated_at: '2025-02-08T10:24:30',
-  },
-  {
-    id: 6,
-    message: '지금 저랑 장난치세요?',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'jiwon@gmail.com',
-      id: 22,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'fuck',
-      name: '박지원',
-      nickname: '감자',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:24:40',
-    updated_at: '2025-02-08T10:24:40',
-  },
-  {
-    id: 7,
-    message: '싸우기 마세요... 무서운데..ㅜㅜ',
-    sender: {
-      address: '',
-      created_at: '2025-02-08T10:22:59',
-      email: 'guwon@gmail.com',
-      id: 12,
-      is_auto_login: 0,
-      is_job_open: 1,
-      job: 'Hello',
-      job_description: 'fuck',
-      name: '이구원',
-      nickname: '옥수수',
-      phone_number: '',
-      src: 'file:///Users/mac/Library/Developer/CoreSimulator/Devices/CC50996C-6BF8-422A-86C3-56D80406AECF/data/Containers/Data/Application/79D557B7-F536-456D-AFE0-D7A8334CFB31/tmp/E11F1E91-58C0-4FF8-8058-0D7AAEB42471.jpg',
-      updated_at: '2025-02-08T13:08:10',
-      accident_date: '2025-02-08',
-    },
-    created_at: '2025-02-08T10:24:41',
-    updated_at: '2025-02-08T10:24:41',
-  },
-];
-
 // 내 정보 가져오고, 채팅 정보 가져오고, 메세지 가져오고
 const ChatScreen = ({navigation, route}: any) => {
   // 채팅은 무조건 나의 채팅방임.
   // chatId, articleId 타입 정의
+  const scrollViewRef = useRef<ScrollView>(null);
   const {
     chatId,
     articleId,
@@ -273,8 +119,14 @@ const ChatScreen = ({navigation, route}: any) => {
 
   useEffect(() => {
     fetchChat();
-    // fetchMessages();
+    fetchMessages();
   }, []);
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({animated: true});
+    }
+  }, [messages]); // messages가 변경될 때 실행
 
   return (
     <View style={styles.container}>
@@ -313,54 +165,60 @@ const ChatScreen = ({navigation, route}: any) => {
               : ''}
           </Text>
         </View>
-        <View style={styles.layout}>
-          <View style={styles.chatMain}>
-            {messages.length === 0 ? (
-              <View
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 16,
-                }}>
-                <Text style={styles.voidText}>
-                  {chat
-                    ? chat.participants?.map(p => p.user.nickname).join(', ')
-                    : ''}
-                  님과의 채팅방입니다.
-                </Text>
-                <Text style={styles.voidText}>
-                  타인에게 피해가 되는 언행은 삼가해주세요
-                </Text>
-              </View>
-            ) : (
-              messages.map((message, index) => {
-                if (message.sender.id === user.id) {
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}>
+          <ScrollView
+            style={{flex: 1, backgroundColor: '#F2F4F6'}}
+            ref={scrollViewRef}>
+            <View style={styles.chatMain}>
+              {messages.length === 0 ? (
+                <View
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 16,
+                  }}>
+                  <Text style={styles.voidText}>
+                    {chat
+                      ? chat.participants?.map(p => p.user.nickname).join(', ')
+                      : ''}
+                    님과의 채팅방입니다.
+                  </Text>
+                  <Text style={styles.voidText}>
+                    타인에게 피해가 되는 언행은 삼가해주세요
+                  </Text>
+                </View>
+              ) : (
+                messages.map((message, index) => {
+                  if (message.sender.id === user.id) {
+                    return (
+                      <MyMessages
+                        key={`${index}-${message.id}`}
+                        messages={[message]}
+                      />
+                    );
+                  }
                   return (
-                    <MyMessages
+                    <YourMessages
                       key={`${index}-${message.id}`}
                       messages={[message]}
                     />
                   );
-                }
-                return (
-                  <YourMessages
-                    key={`${index}-${message.id}`}
-                    messages={[message]}
-                  />
-                );
-              })
-            )}
-          </View>
+                })
+              )}
+            </View>
+          </ScrollView>
           <View style={styles.inputContainer}>
             <View style={styles.iconContainer}>
               <Pressable
                 onPress={() => {
                   console.log('send message');
                 }}>
-                <PlusIcon />
+                {/* <PlusIcon /> */}
               </Pressable>
             </View>
             <View
@@ -401,7 +259,7 @@ const ChatScreen = ({navigation, route}: any) => {
               </Pressable>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );
@@ -446,7 +304,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: '#F2F4F6',
   },
   inputContainer: {
     display: 'flex',

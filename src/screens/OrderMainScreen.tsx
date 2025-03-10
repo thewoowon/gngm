@@ -1,18 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   TextInput,
   Pressable,
-  Animated,
   ScrollView,
 } from 'react-native';
 import {KakaoIcon, RingIcon, SearchIcon} from '../components/Icons';
-import {CURRENT_ORDER_DATA, PREVIOUS_ORDER_DATA} from '../data';
+import {useOrder} from '../hooks';
+import {Order} from '../types/get';
 
 type RootStackParamList = {
   OrderMain: undefined;
@@ -23,10 +22,33 @@ type RootStackParamList = {
 };
 
 const OrderMainScreen = ({navigation, route}: any) => {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [oldOrders, setOldOrders] = useState<Order[]>([]);
   // const {query, userId} = route.params;
   const handleGoToChat = () => {
     // navigation.navigate('Chat');
   };
+
+  const {findMyOrder} = useOrder();
+
+  const fetchMyOrders = async () => {
+    try {
+      const data = await findMyOrder();
+      if (!data) {
+        setOrders([]);
+      } else {
+        setOrders(data);
+      }
+    } catch (error) {
+      console.error('나의 주문 조회 오류:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyOrders();
+    setOldOrders([]);
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -82,8 +104,8 @@ const OrderMainScreen = ({navigation, route}: any) => {
               flexDirection: 'column',
               gap: 13,
             }}>
-            {CURRENT_ORDER_DATA.length > 0 ? (
-              CURRENT_ORDER_DATA.map(order => {
+            {orders.length > 0 ? (
+              orders.map(order => {
                 return (
                   <View
                     key={order.id}
@@ -122,7 +144,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
                             fontSize: 19,
                             fontFamily: 'Pretendard-SemiBold',
                           }}>
-                          {order.title}
+                          {order.description}
                         </Text>
                         <View
                           style={{
@@ -137,7 +159,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
                             fontSize: 12,
                             fontFamily: 'Pretendard-SemiBold',
                           }}>
-                          {order.title}
+                          {order.description}
                         </Text>
                       </View>
                       <Pressable>
@@ -188,7 +210,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
                             fontSize: 14,
                             fontFamily: 'Pretendard-Medium',
                           }}>
-                          {order.dueDate}
+                          {order.created_at}
                         </Text>
                       </View>
                       <Pressable
@@ -221,9 +243,13 @@ const OrderMainScreen = ({navigation, route}: any) => {
             ) : (
               <View
                 style={{
-                  flex: 1,
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 44,
                 }}>
-                <Text>진행중인 주문이 없습니다</Text>
+                <Text style={styles.noneText}>진행중인 주문이 없습니다</Text>
               </View>
             )}
           </View>
@@ -243,8 +269,8 @@ const OrderMainScreen = ({navigation, route}: any) => {
               flexDirection: 'column',
               gap: 13,
             }}>
-            {PREVIOUS_ORDER_DATA.length > 0 ? (
-              PREVIOUS_ORDER_DATA.map(order => {
+            {oldOrders.length > 0 ? (
+              oldOrders.map(order => {
                 return (
                   <View
                     key={order.id}
@@ -283,7 +309,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
                             fontSize: 19,
                             fontFamily: 'Pretendard-SemiBold',
                           }}>
-                          {order.title}
+                          {order.description}
                         </Text>
                         <View
                           style={{
@@ -298,7 +324,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
                             fontSize: 12,
                             fontFamily: 'Pretendard-SemiBold',
                           }}>
-                          {order.title}
+                          {order.description}
                         </Text>
                       </View>
                       <Pressable>
@@ -349,7 +375,7 @@ const OrderMainScreen = ({navigation, route}: any) => {
                             fontSize: 14,
                             fontFamily: 'Pretendard-Medium',
                           }}>
-                          {order.dueDate}
+                          {order.created_at}
                         </Text>
                       </View>
                     </View>
@@ -359,9 +385,13 @@ const OrderMainScreen = ({navigation, route}: any) => {
             ) : (
               <View
                 style={{
-                  flex: 1,
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 44,
                 }}>
-                <Text>진행중인 주문이 없습니다</Text>
+                <Text style={styles.noneText}>진행중인 주문이 없습니다</Text>
               </View>
             )}
           </View>
@@ -425,6 +455,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  noneText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#C7CDD1',
+    fontFamily: 'Prentendard-SemiBold',
+    fontWeight: 600,
   },
 });
 
