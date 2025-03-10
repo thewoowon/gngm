@@ -32,7 +32,7 @@ const useMessage = () => {
   ): Promise<Message[] | undefined | null> => {
     try {
       const accessToken = await getAccessToken();
-      const response = await customAxios.get(`/messages/${id}`, {
+      const response = await customAxios.get(`/messages/chat/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
