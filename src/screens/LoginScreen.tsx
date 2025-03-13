@@ -23,11 +23,6 @@ import {useAuth} from '../hooks';
 import customAxios from '../axios/customAxios';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
 
-const BASE_URL = Platform.select({
-  ios: 'http://127.0.0.1:8000', // iOS 시뮬레이터
-  android: 'http://127.0.0.1:8000', // Android 에뮬레이터
-});
-
 const LoginScreen = ({navigation, route}: any) => {
   const [isSelected, setSelection] = useState(false);
   const {setIsAuthenticated} = useAuth();
@@ -102,8 +97,8 @@ const LoginScreen = ({navigation, route}: any) => {
     Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
     return;
     try {
-      const {data} = await axios.get(
-        `${BASE_URL}/auth/naver?is_selected=${isSelected ? 1 : 0}`,
+      const {data} = await customAxios.get(
+        `/auth/naver?is_selected=${isSelected ? 1 : 0}`,
       );
 
       if (data.user.nickname) {
@@ -121,8 +116,8 @@ const LoginScreen = ({navigation, route}: any) => {
     Alert.alert('준비중입니다. 구글 로그인 방식을 이용해주세요.');
     return;
     try {
-      const {data} = await axios.get(
-        `${BASE_URL}/auth/kakao?is_selected=${isSelected ? 1 : 0}`,
+      const {data} = await customAxios.get(
+        `/auth/kakao?is_selected=${isSelected ? 1 : 0}`,
       );
 
       if (data.user.nickname) {
@@ -137,10 +132,8 @@ const LoginScreen = ({navigation, route}: any) => {
 
   const loginWithApple = async () => {
     try {
-      // performs login request
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
-        // Note: it appears putting FULL_NAME first is important, see issue #293
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
 
@@ -151,18 +144,9 @@ const LoginScreen = ({navigation, route}: any) => {
       // Apple에서 받은 데이터
       const {identityToken, user, authorizationCode} = appleAuthRequestResponse;
 
-      console.log('Apple Sign-In response: ', appleAuthRequestResponse);
-      console.log(identityToken);
-      console.log(user);
-      console.log(authorizationCode);
-
-      // get current authentication state for user
-      // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
       const credentialState = await appleAuth.getCredentialStateForUser(user);
 
-      // use credentialState response to ensure the user is authenticated
       if (credentialState === appleAuth.State.AUTHORIZED) {
-        // user is authenticated
         const response = await customAxios.post(`/auth/apple`, {
           identityToken,
           authorizationCode,

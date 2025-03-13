@@ -23,6 +23,7 @@ import {Delivery, User} from '../types/get';
 import {useFocusEffect} from '@react-navigation/native';
 import {confirm} from '../utils/alert';
 import WithdrawModal from '../components/WithdrawModal';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const MyMainScreen = ({navigation, route}: any) => {
   const {getMe} = useMe();
@@ -140,251 +141,256 @@ const MyMainScreen = ({navigation, route}: any) => {
             <RingIcon />
           </Pressable>
         </View>
-        <View
+        <ScrollView
           style={{
             flex: 1,
-            marginTop: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 12,
           }}>
-          <View style={styles.profileWrapper}>
-            <View style={styles.profile}>
-              <View>
-                <Image
-                  source={{
-                    uri:
-                      user.src ||
-                      'https://imagedelivery.net/6qzLODAqs2g1LZbVYqtuQw/b474d0e1-13c9-4516-19a6-7b7f5a567900/public',
-                  }}
-                  style={{
-                    width: 54,
-                    height: 54,
-                    borderRadius: 50,
-                  }}
-                />
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                }}>
+          <View
+            style={{
+              flex: 1,
+              marginTop: 10,
+              paddingLeft: 20,
+              paddingRight: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+            }}>
+            <View style={styles.profileWrapper}>
+              <View style={styles.profile}>
+                <View>
+                  <Image
+                    source={{
+                      uri:
+                        user.src ||
+                        'https://imagedelivery.net/6qzLODAqs2g1LZbVYqtuQw/b474d0e1-13c9-4516-19a6-7b7f5a567900/public',
+                    }}
+                    style={{
+                      width: 54,
+                      height: 54,
+                      borderRadius: 50,
+                    }}
+                  />
+                </View>
                 <View
                   style={{
-                    width: '100%',
+                    flex: 1,
                     display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
                   }}>
-                  <Text
+                  <View
                     style={{
-                      color: '#1B1B1B',
-                      fontSize: 16,
-                      fontFamily: 'Pretendard-SemiBold',
-                      lineHeight: 24,
-                    }}>
-                    {user.nickname}
-                  </Text>
-                  <Pressable
-                    style={{
+                      width: '100%',
                       display: 'flex',
                       flexDirection: 'row',
                       alignItems: 'center',
-                      gap: 3,
-                    }}
-                    onPress={() => {
-                      navigation.navigate('ProfileEdit');
+                      justifyContent: 'space-between',
                     }}>
                     <Text
                       style={{
-                        color: '#8E979E',
-                        fontSize: 12,
-                        fontFamily: 'Pretendard-Regular',
-                        lineHeight: 19,
+                        color: '#1B1B1B',
+                        fontSize: 16,
+                        fontFamily: 'Pretendard-SemiBold',
+                        lineHeight: 24,
                       }}>
-                      내 정보 수정
+                      {user.nickname}
                     </Text>
-                    <PencilIcon />
-                  </Pressable>
-                </View>
-                <Text
-                  style={{
-                    color: '#1B1B1B',
-                    fontSize: 12,
-                    fontFamily: 'Pretendard-SeimBold',
-                    lineHeight: 19,
-                  }}>
-                  {Boolean(user.is_job_open) ? user.job : '-'}{' '}
+                    <Pressable
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 3,
+                      }}
+                      onPress={() => {
+                        navigation.navigate('ProfileEdit');
+                      }}>
+                      <Text
+                        style={{
+                          color: '#8E979E',
+                          fontSize: 12,
+                          fontFamily: 'Pretendard-Regular',
+                          lineHeight: 19,
+                        }}>
+                        내 정보 수정
+                      </Text>
+                      <PencilIcon />
+                    </Pressable>
+                  </View>
                   <Text
                     style={{
-                      color: '#B1BAC0',
+                      color: '#1B1B1B',
+                      fontSize: 12,
+                      fontFamily: 'Pretendard-SeimBold',
+                      lineHeight: 19,
                     }}>
-                    ({Boolean(user.is_job_open) ? '공개' : '비공개'})
+                    {Boolean(user.is_job_open) ? user.job : '-'}{' '}
+                    <Text
+                      style={{
+                        color: '#B1BAC0',
+                      }}>
+                      ({Boolean(user.is_job_open) ? '공개' : '비공개'})
+                    </Text>
                   </Text>
-                </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: '#F2F4F6',
+                  width: '100%',
+                }}></View>
+              <View style={styles.profileBottomArea}>
+                <View
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 2,
+                  }}>
+                  <Text
+                    style={{
+                      color: '#6E7881',
+                      fontSize: 12,
+                      fontFamily: 'Pretendard-Medium',
+                      lineHeight: 19,
+                    }}>
+                    가는김에와 함께한 지
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#005C48',
+                      fontSize: 14,
+                      fontFamily: 'Pretendard-SemiBold',
+                      lineHeight: 22,
+                    }}>
+                    {fromCreateToNow(user.created_at)}일
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 2,
+                  }}>
+                  <Text
+                    style={{
+                      color: '#6E7881',
+                      fontSize: 12,
+                      fontFamily: 'Pretendard-Medium',
+                      lineHeight: 19,
+                    }}>
+                    전달
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#005C48',
+                      fontSize: 14,
+                      fontFamily: 'Pretendard-SemiBold',
+                      lineHeight: 22,
+                    }}>
+                    {deliveries.length}회
+                  </Text>
+                </View>
               </View>
             </View>
             <View
               style={{
-                height: 1,
-                backgroundColor: '#F2F4F6',
                 width: '100%',
-              }}></View>
-            <View style={styles.profileBottomArea}>
-              <View
+                paddingTop: 13,
+                paddingBottom: 13,
+                paddingLeft: 20,
+                paddingRight: 20,
+                borderRadius: 8,
+                backgroundColor: '#1CD7AE',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text
                 style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 2,
+                  color: '#FFFFFF',
+                  fontSize: 14,
+                  fontFamily: 'Pretendard-Medium',
+                  lineHeight: 22,
                 }}>
-                <Text
-                  style={{
-                    color: '#6E7881',
-                    fontSize: 12,
-                    fontFamily: 'Pretendard-Medium',
-                    lineHeight: 19,
-                  }}>
-                  가는김에와 함께한 지
-                </Text>
-                <Text
-                  style={{
-                    color: '#005C48',
-                    fontSize: 14,
-                    fontFamily: 'Pretendard-SemiBold',
-                    lineHeight: 22,
-                  }}>
-                  {fromCreateToNow(user.created_at)}일
-                </Text>
-              </View>
-              <View
+                가는김에로 절약한 시간
+              </Text>
+              <Text
                 style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 2,
+                  color: '#FFFFFF',
+                  fontSize: 16,
+                  fontFamily: 'Pretendard-SemiBold',
+                  lineHeight: 24,
                 }}>
-                <Text
-                  style={{
-                    color: '#6E7881',
-                    fontSize: 12,
-                    fontFamily: 'Pretendard-Medium',
-                    lineHeight: 19,
-                  }}>
-                  전달
-                </Text>
-                <Text
-                  style={{
-                    color: '#005C48',
-                    fontSize: 14,
-                    fontFamily: 'Pretendard-SemiBold',
-                    lineHeight: 22,
-                  }}>
-                  {deliveries.length}회
-                </Text>
-              </View>
+                0시간 0분
+              </Text>
             </View>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              paddingTop: 13,
-              paddingBottom: 13,
-              paddingLeft: 20,
-              paddingRight: 20,
-              borderRadius: 8,
-              backgroundColor: '#1CD7AE',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <Text
+            <View
               style={{
-                color: '#FFFFFF',
-                fontSize: 14,
-                fontFamily: 'Pretendard-Medium',
-                lineHeight: 22,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
               }}>
-              가는김에로 절약한 시간
-            </Text>
-            <Text
-              style={{
-                color: '#FFFFFF',
-                fontSize: 16,
-                fontFamily: 'Pretendard-SemiBold',
-                lineHeight: 24,
-              }}>
-              0시간 0분
-            </Text>
-          </View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}>
-            {menu.map((menu, index) => (
-              <Pressable
-                key={index}
-                onPress={() => {
-                  navigation.navigate(menu.destination);
-                }}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  gap: 6,
-                }}>
-                {menu.icon}
-                <Text
+              {menu.map((menu, index) => (
+                <Pressable
+                  key={index}
+                  onPress={() => {
+                    navigation.navigate(menu.destination);
+                  }}
                   style={{
-                    color: '#1B1B1B',
-                    fontSize: 16,
-                    lineHeight: 24,
-                    fontFamily: 'Pretendard-Medium',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    gap: 6,
                   }}>
-                  {menu.title}
-                </Text>
-              </Pressable>
-            ))}
+                  {menu.icon}
+                  <Text
+                    style={{
+                      color: '#1B1B1B',
+                      fontSize: 16,
+                      lineHeight: 24,
+                      fontFamily: 'Pretendard-Medium',
+                    }}>
+                    {menu.title}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+            <Pressable onPress={handleLogout}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontFamily: 'Pretendard-Regular',
+                  lineHeight: 22,
+                  color: '#6E7881',
+                }}>
+                로그아웃
+              </Text>
+            </Pressable>
+            <Pressable onPress={handleWithdraw}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontFamily: 'Pretendard-Medium',
+                  lineHeight: 22,
+                  color: '#FF6B6B',
+                }}>
+                회원탈퇴(Delete account)
+              </Text>
+            </Pressable>
           </View>
-          <Pressable onPress={handleLogout}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontFamily: 'Pretendard-Regular',
-                lineHeight: 22,
-                color: '#6E7881',
-              }}>
-              로그아웃
-            </Text>
-          </Pressable>
-          <Pressable onPress={handleWithdraw}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontFamily: 'Pretendard-Regular',
-                lineHeight: 22,
-                color: '#6E7881',
-              }}>
-              회원탈퇴
-            </Text>
-          </Pressable>
-        </View>
+        </ScrollView>
         <WithdrawModal isVisible={isVisible} setIsVisible={setIsVisible} />
       </SafeAreaView>
     </View>
